@@ -22,32 +22,28 @@ def new_place(place):
     toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
     a = [float(i) for i in toponym['boundedBy']['Envelope']['lowerCorner'].split()]
     b = [float(i) for i in toponym['boundedBy']['Envelope']['upperCorner'].split()]
-    delta = [str(b[0] - a[0]), str(b[1] - a[1])]
+    delta = [str(max(b[0], a[0]) - min(b[0], a[0])), str(max(b[1], a[1]) - min(b[1], a[1]))]
     map_params = {
         "ll": ",".join([toponym_longitude, toponym_lattitude]),
+        'z': coords(delta[0], delta[1]),
         "spn": ",".join([delta[0], delta[1]]),
         "l": "sat",
-        'pt': ",".join([toponym_longitude, toponym_lattitude]) + ',org',
-        'z': coords(delta[0], delta[1]) + 4
     }
-    print(map_params)
     map_api_server = "http://static-maps.yandex.ru/1.x/"
     response = requests.get(map_api_server, params=map_params)
-    img = Image.open(BytesIO(response.content))
-    img.show()
+    mg = Image.open(BytesIO(response.content))
+    mg.show()
 
 
-spisok = ['Париж', 'Лондон', 'Москва', "Токио", "Вашингтон"]
+spisok = [['Крассная площадь', 'Москва'], ['Египет Пирамида Хеопса', 'Египет'],
+          ['Санкт-Петербург Дворцовая площадь', 'Санкт-Петербург'], ['Италия Рим Челио', 'Рим'],
+          ['Россия Республика Татарстан Казань проезд Шейнкмана', 'Казань']]
+del spisok[:-1]
 shuffle(spisok)
-print(spisok)
 for i in spisok:
-    new_place(i)
+    new_place(i[0])
     print("Какой это город?")
     answer = input()
-    if answer == i:
-        continue
-    else:
-        while answer != i:
-            print('Неверно, попробуйте ещё.')
-            answer = input()
-
+    while answer != i[1]:
+        print('Неверно, попробуйте ещё раз.')
+        answer = input()
