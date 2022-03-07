@@ -12,5 +12,3 @@ def coords(x, y):
             c = j + 1
             break
     return (c + d) // 2
-
-print(coords(0.8 , 0.4))
