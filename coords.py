@@ -12,7 +12,3 @@ def coords(x, y):
             c = j + 1
             break
     return (c + d) // 2
-
-
-p = coords(1.1645309999999967, 0.8790600000000026)
-print(p)
